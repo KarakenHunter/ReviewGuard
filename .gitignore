@@ -1,0 +1,21 @@
+# Dependencies and generated files
+node_modules/
+venv/
+.venv/
+__pycache__/
+.pytest_cache/
+*.py[cod]
+*.log
+
+# Local environment files and credentials
+.env
+.env.*
+!.env.example
+Creds.txt
+creds.txt
+credentials.txt
+credentials.*
+*.pem
+*.key
+*.p12
+*.pfx
