@@ -8,13 +8,13 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '../co
 import { Label, Select } from '../components/ui/form';
 import { ErrorState, Notice, PageHeader, Skeleton } from '../components/ui/misc';
 import { Table, Td, Th } from '../components/ui/table';
-import { RISK_COLOR, RISK_LABEL, SENTIMENT_COLOR, cap, fmtDate, statusLabel } from '../lib/format';
+import { NEUTRAL_COLOR, RISK_COLOR, RISK_LABEL, SENTIMENT_COLOR, cap, fmtDate, statusLabel } from '../lib/format';
 
 function Dist({ title, rows, color, label = cap, total }) {
   return (
     <Card><CardHeader><CardTitle>{title}</CardTitle></CardHeader><CardContent>
       <Table><thead><tr><Th>Group</Th><Th className="text-right">Reviews</Th><Th className="text-right">Share</Th></tr></thead>
-        <tbody>{rows.map((r) => <tr key={r.label}><Td><span className="mr-2 inline-block h-2.5 w-2.5 rounded-full align-middle" style={{ background: color?.(r.label) || '#7C86A8' }} aria-hidden />{label(r.label)}</Td><Td className="text-right tabular-nums">{r.count}</Td><Td className="text-right tabular-nums text-muted">{total ? Math.round((r.count / total) * 100) : 0}%</Td></tr>)}</tbody></Table>
+        <tbody>{rows.map((r) => <tr key={r.label}><Td><span className="mr-2 inline-block h-2.5 w-2.5 rounded-full align-middle" style={{ background: color?.(r.label) || NEUTRAL_COLOR }} aria-hidden />{label(r.label)}</Td><Td className="text-right tabular-nums">{r.count}</Td><Td className="text-right tabular-nums text-muted">{total ? Math.round((r.count / total) * 100) : 0}%</Td></tr>)}</tbody></Table>
     </CardContent></Card>
   );
 }

@@ -1,7 +1,12 @@
 export const EMOTIONS = ['anger', 'disgust', 'fear', 'joy', 'sadness', 'surprise', 'neutral'];
-export const EMOTION_COLOR = { anger: '#FF5C7A', disgust: '#8FBF5A', fear: '#B28CFF', joy: '#F5C24B', sadness: '#5B8CFF', surprise: '#3CC9E0', neutral: '#7C86A8' };
-export const SENTIMENT_COLOR = { positive: '#3DDC97', negative: '#FF5C7A', neutral: '#7C86A8' };
-export const RISK_COLOR = { low: '#3DDC97', moderate: '#F5B544', high: '#FF5C7A' };
+export const PRIMARY_COLOR = '#4563C7';
+export const VIOLET_COLOR = '#7558B5';
+export const NEUTRAL_COLOR = '#858B96';
+export const CHART_GRID_COLOR = '#E4E7EC';
+export const CHART_TEXT_COLOR = '#667085';
+export const EMOTION_COLOR = { anger: '#C7464F', disgust: '#64844B', fear: '#7558B5', joy: '#A76716', sadness: '#4563C7', surprise: '#267F91', neutral: NEUTRAL_COLOR };
+export const SENTIMENT_COLOR = { positive: '#247A55', negative: '#C7464F', neutral: NEUTRAL_COLOR };
+export const RISK_COLOR = { low: '#247A55', moderate: '#A76716', high: '#C7464F' };
 export const RISK_LABEL = { low: 'Low risk', moderate: 'Moderate risk', high: 'High risk' };
 export const RISK_TONE = { low: 'success', moderate: 'warning', high: 'danger' };
 export const SENTIMENT_TONE = { positive: 'success', negative: 'danger', neutral: 'neutral' };

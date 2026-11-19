@@ -7,7 +7,7 @@ import { Badge } from '../components/ui/badge';
 import { Button } from '../components/ui/button';
 import { EmptyState, ErrorState, PageHeader, Skeleton } from '../components/ui/misc';
 import { DistributionBar, Donut } from '../components/charts';
-import { EMOTION_COLOR, RISK_COLOR, RISK_TONE, SENTIMENT_COLOR, SENTIMENT_TONE, cap, fmtDate, recLabel, truncate } from '../lib/format';
+import { EMOTION_COLOR, PRIMARY_COLOR, RISK_COLOR, RISK_TONE, SENTIMENT_COLOR, SENTIMENT_TONE, VIOLET_COLOR, cap, fmtDate, recLabel, truncate } from '../lib/format';
 
 function Stat({ icon: Icon, label, value, hint, tone }) {
   return (
@@ -31,11 +31,11 @@ export default function Overview() {
     <>
       <PageHeader title="Overview" description="A summary of every review analysed so far. Numbers come straight from the database." />
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-        <Stat icon={Activity} label="Reviews analysed" value={t.total} tone="#5B8CFF" hint={`Average risk score ${t.averageRiskScore}`} />
+        <Stat icon={Activity} label="Reviews analysed" value={t.total} tone={PRIMARY_COLOR} hint={`Average risk score ${t.averageRiskScore}`} />
         <Stat icon={Smile} label="Positive" value={t.positive} tone={SENTIMENT_COLOR.positive} />
         <Stat icon={Frown} label="Negative" value={t.negative} tone={SENTIMENT_COLOR.negative} />
         <Stat icon={Meh} label="Neutral" value={t.neutral} tone={SENTIMENT_COLOR.neutral} hint="Low-confidence or mixed wording" />
-        <Stat icon={Flag} label="Flagged for a look" value={t.flagged} tone="#9B6BFF" hint="Suggested for human review" />
+        <Stat icon={Flag} label="Flagged for a look" value={t.flagged} tone={VIOLET_COLOR} hint="Suggested for human review" />
         <Stat icon={ShieldAlert} label="High risk" value={t.highRisk} tone={RISK_COLOR.high} />
       </div>
       <div className="mt-4 grid gap-4 lg:grid-cols-3">

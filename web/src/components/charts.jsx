@@ -1,9 +1,10 @@
 import { Bar, BarChart, Cell, Pie, PieChart, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts';
-import { cap } from '../lib/format';
+import { CHART_GRID_COLOR, CHART_TEXT_COLOR, PRIMARY_COLOR, cap } from '../lib/format';
 
-const tip = { contentStyle: { background: '#111830', border: '1px solid #243058', borderRadius: 10, color: '#E7EAF6', fontSize: 13 }, itemStyle: { color: '#E7EAF6' }, labelStyle: { color: '#8E97B8' }, cursor: { fill: 'rgba(91,140,255,0.08)' } };
+const tip = { contentStyle: { background: '#FFFFFF', border: `1px solid ${CHART_GRID_COLOR}`, borderRadius: 10, color: '#20232A', fontSize: 13, boxShadow: '0 8px 24px rgba(16, 24, 40, 0.12)' }, itemStyle: { color: '#20232A' }, labelStyle: { color: CHART_TEXT_COLOR }, cursor: { fill: `${PRIMARY_COLOR}12` } };
 export const chartTooltip = tip;
-export const axisTick = { fill: '#8E97B8', fontSize: 12 };
+export const axisTick = { fill: CHART_TEXT_COLOR, fontSize: 12 };
+export const chartLegendStyle = { color: CHART_TEXT_COLOR };
 
 export function DistributionBar({ data, colorFor, height = 240 }) {
   const rows = data.map((d) => ({ name: cap(d.label), count: d.count, color: colorFor(d.label) }));
@@ -30,7 +31,7 @@ export function Donut({ data, colorFor, centerValue, centerLabel }) {
         <ResponsiveContainer>
           <PieChart>
             <Pie isAnimationActive={false} data={rows} dataKey="count" nameKey="label" innerRadius={54} outerRadius={78} paddingAngle={total ? 2 : 0} stroke="none">
-              {rows.map((d) => <Cell key={d.label} fill={total ? colorFor(d.label) : '#243058'} />)}
+              {rows.map((d) => <Cell key={d.label} fill={total ? colorFor(d.label) : CHART_GRID_COLOR} />)}
             </Pie>
             {total > 0 && <Tooltip {...tip} formatter={(v, n) => [v, cap(n)]} />}
           </PieChart>

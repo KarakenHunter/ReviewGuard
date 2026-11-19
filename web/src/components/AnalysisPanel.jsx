@@ -1,19 +1,19 @@
 import { AlertCircle, CheckCircle2, ShieldAlert } from 'lucide-react';
 import { Badge } from './ui/badge';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from './ui/card';
-import { COMPONENTS, EMOTIONS, EMOTION_COLOR, RISK_COLOR, RISK_LABEL, RISK_TONE, SENTIMENT_TONE, cap, fmtDate, pct, recLabel, recTone } from '../lib/format';
+import { COMPONENTS, EMOTIONS, EMOTION_COLOR, NEUTRAL_COLOR, PRIMARY_COLOR, RISK_COLOR, RISK_LABEL, RISK_TONE, SENTIMENT_TONE, VIOLET_COLOR, cap, fmtDate, pct, recLabel, recTone } from '../lib/format';
 
 const THRESHOLDS = { moderate: 30, high: 60 }; // defaults of the AI service; configurable server-side
 
 export function RiskGauge({ score, level }) {
-  const r = 62; const C = 2 * Math.PI * r; const p = Math.max(0, Math.min(100, score)) / 100; const color = RISK_COLOR[level] || '#7C86A8';
+  const r = 62; const C = 2 * Math.PI * r; const p = Math.max(0, Math.min(100, score)) / 100; const color = RISK_COLOR[level] || NEUTRAL_COLOR;
   const tick = (v) => { const t = 2 * Math.PI * (v / 100); return { x1: 80 + (r - 9) * Math.cos(t), y1: 80 + (r - 9) * Math.sin(t), x2: 80 + (r + 9) * Math.cos(t), y2: 80 + (r + 9) * Math.sin(t) }; };
   return (
     <div className="relative h-44 w-44 shrink-0" role="img" aria-label={`Risk score ${Math.round(score)} out of 100: ${RISK_LABEL[level]}`}>
       <svg viewBox="0 0 160 160" className="h-full w-full -rotate-90">
-        <circle cx="80" cy="80" r={r} fill="none" stroke="#182246" strokeWidth="12" />
+        <circle cx="80" cy="80" r={r} fill="none" stroke="#E4E7EC" strokeWidth="12" />
         <circle cx="80" cy="80" r={r} fill="none" stroke={color} strokeWidth="12" strokeLinecap="round" strokeDasharray={`${C * p} ${C}`} style={{ transition: 'stroke-dasharray .6s ease' }} />
-        {[THRESHOLDS.moderate, THRESHOLDS.high].map((v) => <line key={v} {...tick(v)} stroke="#0A0F1F" strokeWidth="3" />)}
+        {[THRESHOLDS.moderate, THRESHOLDS.high].map((v) => <line key={v} {...tick(v)} stroke="#FFFFFF" strokeWidth="3" />)}
       </svg>
       <div className="absolute inset-0 flex flex-col items-center justify-center">
         <span className="text-4xl font-semibold tabular-nums" style={{ color }}>{Math.round(score)}</span>
@@ -23,7 +23,7 @@ export function RiskGauge({ score, level }) {
   );
 }
 
-function Meter({ value, color = '#5B8CFF', label }) {
+function Meter({ value, color = PRIMARY_COLOR, label }) {
   return (
     <div className="h-2 w-full overflow-hidden rounded-full bg-raised" role="meter" aria-label={label} aria-valuenow={Math.round(value)} aria-valuemin={0} aria-valuemax={100}>
       <div className="h-full rounded-full" style={{ width: `${Math.max(0, Math.min(100, value))}%`, background: color }} />
@@ -78,7 +78,7 @@ export function AnalysisPanel({ review }) {
                   <span title={c.hint}>{c.label} <span className="text-xs text-faint">weight {Math.round((w[c.weightKey] ?? 0) * 100)}%</span></span>
                   <span className="tabular-nums text-muted">{Math.round(comps[c.key] ?? 0)}</span>
                 </div>
-                <Meter value={comps[c.key] ?? 0} label={c.label} color="linear-gradient(90deg,#5B8CFF,#9B6BFF)" />
+                <Meter value={comps[c.key] ?? 0} label={c.label} color={`linear-gradient(90deg,${PRIMARY_COLOR},${VIOLET_COLOR})`} />
               </div>
             ))}
             {typeof gate === 'number' && (

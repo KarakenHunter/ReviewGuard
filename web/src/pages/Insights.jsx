@@ -5,13 +5,13 @@ import { useAsync } from '../lib/useAsync';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '../components/ui/card';
 import { Select } from '../components/ui/form';
 import { EmptyState, ErrorState, PageHeader, Skeleton } from '../components/ui/misc';
-import { DistributionBar, axisTick, chartTooltip } from '../components/charts';
-import { EMOTIONS, EMOTION_COLOR, RISK_COLOR, cap, pct } from '../lib/format';
+import { DistributionBar, axisTick, chartLegendStyle, chartTooltip } from '../components/charts';
+import { CHART_GRID_COLOR, EMOTIONS, EMOTION_COLOR, PRIMARY_COLOR, RISK_COLOR, VIOLET_COLOR, cap, pct } from '../lib/format';
 
 const Tile = ({ label, value, hint }) => (
   <div className="rounded-lg border border-border bg-background/40 px-4 py-3"><p className="text-xs text-muted">{label}</p><p className="text-xl font-semibold tabular-nums">{value}</p>{hint && <p className="text-xs text-faint">{hint}</p>}</div>
 );
-const grid = <CartesianGrid stroke="#243058" strokeDasharray="3 3" vertical={false} />;
+const grid = <CartesianGrid stroke={CHART_GRID_COLOR} strokeDasharray="3 3" vertical={false} />;
 
 export default function Insights() {
   const [days, setDays] = useState(30);
@@ -37,14 +37,14 @@ export default function Insights() {
           <CardContent><div style={{ height: Math.max(220, catData.length * 48 + 60) }} role="img" aria-label="Stacked bar chart of emotions per product category">
             <ResponsiveContainer><BarChart data={catData} layout="vertical" margin={{ left: 8, right: 16 }}>
               <XAxis type="number" allowDecimals={false} tick={axisTick} axisLine={false} tickLine={false} /><YAxis type="category" dataKey="category" tick={axisTick} axisLine={false} tickLine={false} width={96} />
-              <Tooltip {...chartTooltip} formatter={(v, n) => [v, cap(n)]} /><Legend formatter={(v) => <span style={{ color: '#8E97B8' }}>{cap(v)}</span>} />
+              <Tooltip {...chartTooltip} formatter={(v, n) => [v, cap(n)]} /><Legend formatter={(v) => <span style={chartLegendStyle}>{cap(v)}</span>} />
               {EMOTIONS.map((e) => <Bar key={e} dataKey={e} stackId="a" isAnimationActive={false} fill={EMOTION_COLOR[e]} barSize={20} />)}
             </BarChart></ResponsiveContainer></div></CardContent></Card>
 
         <Card><CardHeader><CardTitle>Extreme language</CardTitle><CardDescription>How often reviews use absolute or heated wording</CardDescription></CardHeader>
           <CardContent className="space-y-4">
             <div className="grid grid-cols-3 gap-2"><Tile label="Analysed" value={d.extremeLanguage.analyzed} /><Tile label="With extreme words" value={d.extremeLanguage.extremeCount} hint={pct(d.extremeLanguage.extremeRate)} /><Tile label="Promotional phrases" value={d.extremeLanguage.promotionalCount} /></div>
-            {d.extremeLanguage.topTerms.length ? <DistributionBar height={Math.max(160, d.extremeLanguage.topTerms.length * 28 + 30)} data={d.extremeLanguage.topTerms.map((t) => ({ label: t.term, count: t.count }))} colorFor={() => '#F5B544'} /> : <p className="text-sm text-muted">No extreme words found.</p>}
+            {d.extremeLanguage.topTerms.length ? <DistributionBar height={Math.max(160, d.extremeLanguage.topTerms.length * 28 + 30)} data={d.extremeLanguage.topTerms.map((t) => ({ label: t.term, count: t.count }))} colorFor={() => RISK_COLOR.moderate} /> : <p className="text-sm text-muted">No extreme words found.</p>}
           </CardContent></Card>
 
         <Card><CardHeader><CardTitle>Negative review patterns</CardTitle><CardDescription>{neg.total} negative reviews</CardDescription></CardHeader>
@@ -53,7 +53,7 @@ export default function Insights() {
             {neg.byCategory.length ? <div style={{ height: Math.max(160, neg.byCategory.length * 40 + 40) }} role="img" aria-label="Negative reviews by category">
               <ResponsiveContainer><BarChart data={neg.byCategory} layout="vertical" margin={{ left: 8, right: 16 }}>
                 <XAxis type="number" allowDecimals={false} tick={axisTick} axisLine={false} tickLine={false} /><YAxis type="category" dataKey="category" tick={axisTick} axisLine={false} tickLine={false} width={96} />
-                <Tooltip {...chartTooltip} /><Bar dataKey="count" isAnimationActive={false} name="Negative reviews" fill="#FF5C7A" radius={[0, 6, 6, 0]} barSize={16} /><Bar dataKey="highRisk" isAnimationActive={false} name="Of which high risk" fill="#9B6BFF" radius={[0, 6, 6, 0]} barSize={16} /><Legend formatter={(v) => <span style={{ color: '#8E97B8' }}>{v}</span>} />
+                <Tooltip {...chartTooltip} /><Bar dataKey="count" isAnimationActive={false} name="Negative reviews" fill={RISK_COLOR.high} radius={[0, 6, 6, 0]} barSize={16} /><Bar dataKey="highRisk" isAnimationActive={false} name="Of which high risk" fill={VIOLET_COLOR} radius={[0, 6, 6, 0]} barSize={16} /><Legend formatter={(v) => <span style={chartLegendStyle}>{v}</span>} />
               </BarChart></ResponsiveContainer></div> : null}
           </CardContent></Card>
 
@@ -61,10 +61,10 @@ export default function Insights() {
           <CardContent>{d.trends.length === 0 ? <EmptyState title="No reviews in this window" /> : (
             <div className="h-72" role="img" aria-label="Line chart of daily review counts"><ResponsiveContainer><LineChart data={d.trends} margin={{ left: 0, right: 16, top: 8 }}>
               {grid}<XAxis dataKey="date" tick={axisTick} axisLine={false} tickLine={false} /><YAxis allowDecimals={false} tick={axisTick} axisLine={false} tickLine={false} width={32} />
-              <Tooltip {...chartTooltip} /><Legend formatter={(v) => <span style={{ color: '#8E97B8' }}>{v}</span>} />
-              <Line isAnimationActive={false} type="monotone" dataKey="count" name="Analysed" stroke="#5B8CFF" strokeWidth={2} dot={d.trends.length < 12} />
-              <Line isAnimationActive={false} type="monotone" dataKey="flagged" name="Flagged" stroke="#9B6BFF" strokeWidth={2} dot={d.trends.length < 12} />
-              <Line isAnimationActive={false} type="monotone" dataKey="highRisk" name="High risk" stroke="#FF5C7A" strokeWidth={2} dot={d.trends.length < 12} />
+              <Tooltip {...chartTooltip} /><Legend formatter={(v) => <span style={chartLegendStyle}>{v}</span>} />
+              <Line isAnimationActive={false} type="monotone" dataKey="count" name="Analysed" stroke={PRIMARY_COLOR} strokeWidth={2} dot={d.trends.length < 12} />
+              <Line isAnimationActive={false} type="monotone" dataKey="flagged" name="Flagged" stroke={VIOLET_COLOR} strokeWidth={2} dot={d.trends.length < 12} />
+              <Line isAnimationActive={false} type="monotone" dataKey="highRisk" name="High risk" stroke={RISK_COLOR.high} strokeWidth={2} dot={d.trends.length < 12} />
             </LineChart></ResponsiveContainer></div>)}</CardContent></Card>
       </div>
     </>
