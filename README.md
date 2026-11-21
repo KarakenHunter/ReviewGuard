@@ -52,7 +52,7 @@ The API, analysis service, and frontend run as separate processes. Open a termin
 ### 1. Get the project
 
 ```powershell
-git clone <repository-url>
+git clone https://github.com/KarakenHunter/ReviewGuard
 cd ReviewGuard
 ```
 
